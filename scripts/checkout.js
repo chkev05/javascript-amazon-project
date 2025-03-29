@@ -5,17 +5,40 @@ import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import { loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js";
 
-Promise.all([
-    loadProductsFetch(),
-    new Promise((resolve) => {
-        loadCart(() => {
-            resolve();
+async function loadPage() {
+    try {
+
+        // throw 'error1';
+        await loadProductsFetch();
+        const value = await new Promise((resolve, reject) => {
+            loadCart(() => {
+                // reject('error3')
+                resolve();
+            })
         })
-    }),
-]).then(() => {
+    }
+    catch (error) {
+        console.log('Unexpected erorr, Please Try Again');
+    }
+
+
     renderOrderSummary();
     renderPaymentSummary();
-});
+
+}
+loadPage()
+
+// Promise.all([
+//     loadProductsFetch(),
+//     new Promise((resolve) => {
+//         loadCart(() => {
+//             resolve();
+//         })
+//     }),
+// ]).then(() => {
+//     renderOrderSummary();
+//     renderPaymentSummary();
+// });
 
 // new Promise((resolve) => {
 //     loadProducts(() => {
